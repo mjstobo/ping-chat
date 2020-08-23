@@ -1,0 +1,56 @@
+@import "../core/colours";
+
+.chat-container {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+    flex-flow: column;
+    align-items: flex-start;
+    background: $background;
+}
+
+.chat-bar {
+    position: fixed;
+    bottom: 0;
+    padding: 16px;
+    background: $colour-primary;
+    width: 100%;
+    display: flex;
+    box-shadow:  $shadow;
+    justify-content: space-between;
+    align-items: center;
+
+    & .chat-bar-heading {
+        color: $colour-white;
+        margin: 5px;
+    }
+}
+
+.chat-message {
+    width: 70%;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    margin-right: 1.5%;
+    background: $colour-white;
+    padding: 10px;
+    border: 2px solid $colour-white;
+    border-radius: 6px;
+}
+
+.chat-message-input {
+    height: 50%;
+    width: 92.5%;
+    border: none;
+    font-size: 14px;
+}
+
+.chat-message-submit {
+    max-width: 75px;
+    flex: 1;
+    border: none;
+    background: $colour-accent;
+    font-size: 1.15em;
+    font-weight: 600;
+    color: $colour-white;
+}

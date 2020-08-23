@@ -1,5 +1,6 @@
 const express = require("express");
 const path = require("path");
+const { emit } = require("process");
 const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
@@ -12,8 +13,10 @@ app.get("/", function (req, res) {
 });
 
 io.on("connection", (socket) => {
-  socket.on("message", (message) => {
+  console.log("user has connected", socket.id)
+  socket.on("chat message", (message) => {
     console.log(message);
+    socket.broadcast.emit("SERVER_MESSAGE", message);
   });
 });
 
