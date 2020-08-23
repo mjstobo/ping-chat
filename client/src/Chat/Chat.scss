@@ -54,3 +54,27 @@
     font-weight: 600;
     color: $colour-white;
 }
+
+.chat-window-content {
+    display: flex;
+    align-content: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: fit-content;
+    margin: 5px;
+    background: $colour-accent;
+    color: $colour-white;
+    border: 4px solid $colour-accent;
+    border-radius: 12px;
+}
+
+.chat-window-text {
+    width: 100%;
+}
+
+.chat-window {
+    width: 100%;
+    display: flex;
+    flex-flow: column;
+    padding: 1.2em;
+}

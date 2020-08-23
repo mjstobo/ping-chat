@@ -1,18 +1,27 @@
 import React, { useState, useContext } from 'react';
 import './Chat.scss';
-import SocketContext from './Socket';
+import SocketContext from './SocketContext';
+import { MessageHistoryContext } from './MessageHistoryContext';
 
 
 
 function ChatBar() {
 
   const [messageInput, setMessageInput] = useState("");
+  const [messages, setMessages] = useContext(MessageHistoryContext)
   const socket = useContext(SocketContext);
 
   const sendMessage = (msg) => {
-    console.log(socket.id);
-    console.log(msg);
     socket.emit('chat message', msg);
+
+    const newMessage = {
+      content: msg,
+      count: messages.length + 1
+    }
+
+    console.log(newMessage);
+
+    setMessages(messages => [...messages, newMessage])
   }
 
   const handleChange = (event) => {

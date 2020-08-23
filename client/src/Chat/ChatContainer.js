@@ -1,24 +1,36 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './Chat.scss';
 import ChatBar from  './ChatBar';
-import SocketContext from './Socket';
+import ChatMessage from './ChatMessage';
+import SocketContext from './SocketContext';
+import { MessageHistoryContext }  from './MessageHistoryContext';
 
 
 function ChatContainer() {
-  const [messageHistory, setMessageHistory] = useState("");
+  const [messages, setMessages] = useContext(MessageHistoryContext)
   const socket = useContext(SocketContext);
 
+  useEffect(() => {
     socket.on("SERVER_MESSAGE", message => {
-      console.log(socket.id);
-      setMessageHistory(message);
+      console.log("new message");
+      const newMessage = {
+        content: message,
+        count: messages.length + 1
+      }
+      setMessages(messages => [...messages, newMessage]);
     })
+  }, [])
+
+
 
    
   return (
     <div className="chat-container">
         <h1>Chat Container!</h1>
         <div className="chat-window">
-          <p>{messageHistory}</p>
+          {messages.map(message => {
+            return  <ChatMessage key={message.content + message.count} type={""} message={message.content} />
+          })}
         </div>
         <ChatBar />
     </div>
