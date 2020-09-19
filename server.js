@@ -16,7 +16,8 @@ io.on("connection", (socket) => {
   console.log("user has connected", socket.id)
   socket.on("chat message", (message) => {
     console.log("Broadcasting ", message)
-    socket.broadcast.emit("SERVER_MESSAGE", message);
+    const author = socket.id;
+    socket.broadcast.emit("SERVER_MESSAGE", {message, author});
   });
 });
 

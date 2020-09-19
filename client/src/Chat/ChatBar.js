@@ -1,11 +1,11 @@
 import React, { useState, useContext } from 'react';
 import './Chat.scss';
-import SocketContext from './SocketContext';
-import { MessageHistoryContext } from './MessageHistoryContext';
+import SocketContext from '../Context/SocketContext';
+import { MessageHistoryContext } from '../Context/MessageHistoryContext';
 
 
 
-function ChatBar() {
+function ChatBar(props) {
 
   const [messageInput, setMessageInput] = useState("");
   const [messages, setMessages] = useContext(MessageHistoryContext)
@@ -18,9 +18,6 @@ function ChatBar() {
       content: msg,
       count: messages.length + 1
     }
-
-    console.log(newMessage);
-
     setMessages(messages => [...messages, newMessage])
   }
 
@@ -31,6 +28,7 @@ function ChatBar() {
   const handleSubmit = (event) => {
     event.preventDefault();
     sendMessage(messageInput);
+    setMessageInput('');
   }
 
 
@@ -38,8 +36,9 @@ function ChatBar() {
   return (
     <div className="chat-bar">
         <h1 className="chat-bar-heading">ping</h1>
+        <h3>{props.hasUsername ? props.username : '' }</h3>
         <form className="chat-message">
-        <textarea onChange={handleChange}  className="chat-message-input"></textarea>
+        <input onChange={handleChange} value={messageInput} className="chat-message-input"></input>
         <button onClick={handleSubmit} className="chat-message-submit">SEND</button>
         </form>
     </div>
