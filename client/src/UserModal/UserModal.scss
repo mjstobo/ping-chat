@@ -14,7 +14,7 @@
   width: 500px;
   max-width: 100%;
 
-  height: 175px;
+  height: 220px;
   max-height: 100%;
 
   background-color: $colour-white;
@@ -48,19 +48,24 @@
 }
 
 .username-submit {
-  margin-top: 10px;
-  max-width: 75px;
-  flex: 1;
+  margin-top: 15px;
   border: none;
   background: $colour-secondary;
-  font-size: 1.15em;
+  font-size: 1.05em;
   font-weight: 600;
   color: $colour-white;
+  padding: 10px;
+  border-radius: 10px;
 }
 
 .username-label {
   color: $colour-accent-2;
   font-weight: 700;
   font-size: 0.8em;
-  align-self: flex-start;
+}
+
+.username-div {
+  width: auto;
+  max-width: 75px;
+  min-width: 50px;
 }

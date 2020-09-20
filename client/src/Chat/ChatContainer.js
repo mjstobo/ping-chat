@@ -12,13 +12,12 @@ function ChatContainer(props) {
 
   useEffect(() => {
     socket.on("SERVER_MESSAGE", message => {
-      console.log("new message");
-      console.log(message)
       const receivedMessage = {
         content: message.content,
-        count: messages.length + 1
-      }
-      console.log("author", message.author)
+        author: message.author,
+        count: messages.length + 1,
+        type: 'server'
+        }
       setMessages(messages => [...messages, receivedMessage]);
     })
   }, [])
@@ -27,7 +26,7 @@ function ChatContainer(props) {
     <div className="chat-container">
         <div className="chat-window">
           {messages.map(message => {
-            return  <ChatMessage key={message.content + message.count} type={""} message={message} />
+            return  <ChatMessage key={message.content + message.count} type={message.type ? 'server' : ''} message={message} />
           })}
         </div>
         <ChatBar hasUsername={props.hasUsername} username={props.username}/>
