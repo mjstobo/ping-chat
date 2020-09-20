@@ -3,33 +3,64 @@
 
 
 .user-modal {
+  display: flex;
+
+  box-shadow: $shadow;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 
-  width: 600px;
+  width: 500px;
   max-width: 100%;
 
-  height: 400px;
+  height: 175px;
   max-height: 100%;
 
-  background-color: $colour-primary;
-  color: $colour-white;
+  background-color: $colour-white;
+  color: $colour-secondary;
 }
 
 .modal-content {
-  position: absolute;
-  top: 0;
-  left: 0;
+  justify-content: center;
+  align-items: center;
+  flex-flow: column;
+  display: flex;
   width: 100%;
   height: 100%;
 
-  padding: 20px 50px 20px 20px;
-
-  overflow: auto;
+  padding: 20px 30px 20px 20px;
 }
 
 .modal-form {
-    background-color: white;
+  background-color: $colour-white;
+    padding: 1%;
+    width: 95%;
+}
+
+.username-input {
+  width: 100%;
+  border: none;
+  border-bottom: 2px solid $colour-accent-2;
+  color: $colour-accent-2;
+  font-size: 1.4em;
+  font-weight: 700;
+}
+
+.username-submit {
+  margin-top: 10px;
+  max-width: 75px;
+  flex: 1;
+  border: none;
+  background: $colour-secondary;
+  font-size: 1.15em;
+  font-weight: 600;
+  color: $colour-white;
+}
+
+.username-label {
+  color: $colour-accent-2;
+  font-weight: 700;
+  font-size: 0.8em;
+  align-self: flex-start;
 }

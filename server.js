@@ -15,9 +15,9 @@ app.get("/", function (req, res) {
 io.on("connection", (socket) => {
   console.log("user has connected", socket.id)
   socket.on("chat message", (message) => {
-    console.log("Broadcasting ", message)
-    const author = socket.id;
-    socket.broadcast.emit("SERVER_MESSAGE", {message, author});
+    const author = message.author;
+    console.log("Broadcasting ", message, author)
+    socket.broadcast.emit("SERVER_MESSAGE", message);
   });
 });
 

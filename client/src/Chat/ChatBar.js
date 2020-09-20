@@ -3,8 +3,6 @@ import './Chat.scss';
 import SocketContext from '../Context/SocketContext';
 import { MessageHistoryContext } from '../Context/MessageHistoryContext';
 
-
-
 function ChatBar(props) {
 
   const [messageInput, setMessageInput] = useState("");
@@ -12,12 +10,14 @@ function ChatBar(props) {
   const socket = useContext(SocketContext);
 
   const sendMessage = (msg) => {
-    socket.emit('chat message', msg);
 
     const newMessage = {
       content: msg,
+      author: props.username,
       count: messages.length + 1
     }
+
+    socket.emit('chat message', newMessage);
     setMessages(messages => [...messages, newMessage])
   }
 
@@ -36,9 +36,9 @@ function ChatBar(props) {
   return (
     <div className="chat-bar">
         <h1 className="chat-bar-heading">ping</h1>
-        <h3>{props.hasUsername ? props.username : '' }</h3>
         <form className="chat-message">
-        <input onChange={handleChange} value={messageInput} className="chat-message-input"></input>
+        <h3 className="username-label">{props.hasUsername ? props.username : '' }</h3>
+        <input onChange={handleChange} value={messageInput} placeholder="Enter your message" className="chat-message-input"></input>
         <button onClick={handleSubmit} className="chat-message-submit">SEND</button>
         </form>
     </div>

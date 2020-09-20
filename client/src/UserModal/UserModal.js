@@ -1,5 +1,4 @@
-import React, { useState, useContext } from 'react';
-import SocketContext from '../Context/SocketContext';
+import React from 'react';
 import './UserModal.scss';
 
 
@@ -19,9 +18,10 @@ function UserModal(props) {
   return (
     <div className="user-modal">
         <div className="modal-content">
+          <h2>Enter a username</h2>
             <form className="modal-form">
                 <input onChange={handleChange} value={props.username} className="modal-form username-input" />
-                <button onClick={handleSubmit} className="chat-message-submit">SEND</button>
+                <button onClick={handleSubmit} className="username-submit">Submit</button>
             </form>
         </div>
     </div>

@@ -4,7 +4,7 @@ import './Chat.scss';
 function ChatMessage(props) {
 
   const [message, setMessage] = useState(props.message);
-  const [type, setType] = useState(props.messageType)
+  const [type] = useState(props.messageType)
 
   useEffect(() => {
       setMessage(props.message)
@@ -12,7 +12,7 @@ function ChatMessage(props) {
 
   return (
     <div className={`chat-window-content ${type}`}>
-        <p className="chat-window-text">{message}</p>
+        <p className="chat-window-text">{message.content} from {message.author}</p>
     </div>
   );
 }
