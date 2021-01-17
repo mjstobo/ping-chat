@@ -12,7 +12,7 @@ function ChatMessage(props) {
   return (
     <div className={`chat-window-content ${props.type}`}>
         <p className="chat-window-text">{message.content}</p>
-        <span className="chat-window-author">from {message.author}</span>
+        <span className="chat-window-author">{message.author}</span>
     </div>
   );
 }

@@ -31,7 +31,7 @@ function ChatBar(props) {
 
   return (
     <div className="chat-bar">
-      <h1 className="chat-bar-heading">ping</h1>
+      <h1 className="chat-bar-heading">ping.</h1>
       <form className="chat-message">
         <input
           onChange={handleChange}
