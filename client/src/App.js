@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./index.scss";
 import ChatContainer from "./Chat/ChatContainer";
 import SocialPanel from "./SocialPanel/SocialPanel";
+import UtilityPanel from "./UtilityPanel/UtilityPanel";
 import SocketContext from "./Context/SocketContext";
 import UserModal from "./UserModal/UserModal";
 import { MessageHistoryProvider } from "./Context/MessageHistoryContext";
@@ -26,8 +27,9 @@ function App() {
               setHasUsername={setHasUsername}
             />
           )}
-          <SocialPanel></SocialPanel>
+          <SocialPanel />
           <ChatContainer username={username} hasUsername={hasUsername} />
+          <UtilityPanel />
         </MessageHistoryProvider>
       </SocketContext.Provider>
     </div>

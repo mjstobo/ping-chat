@@ -10,7 +10,6 @@ function ChatContainer(props) {
   const socket = useContext(SocketContext);
 
   useEffect(() => {
-    console.log(messages);
     socket.on("SERVER_MESSAGE", (message) => {
       const receivedMessage = {
         content: message.content,
@@ -18,9 +17,15 @@ function ChatContainer(props) {
         count: messages.length + 1,
         type: "server",
       };
+
       setMessages((messages) => [...messages, receivedMessage]);
     });
   }, []);
+
+  useEffect(() => {
+    let chatWindow = document.getElementById("chat");
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+  });
 
   return (
     <div className="chat-container">
