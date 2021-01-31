@@ -3,12 +3,13 @@
 .chat-container {
   display: flex;
   width: 100%;
+  padding:0;
+  overflow: hidden;
+  height: 100%;
   min-height: 100vh;
-  max-height: 100vh;
-  overflow: scroll;
   flex-flow: column;
   align-items: flex-start;
-  background: $background;
+  background-color: $colour-white;
 }
 
 .chat-bar {
@@ -29,7 +30,7 @@
 
 .chat-message {
   width: 70%;
-  height: 60px;
+  height: 10%;
   overflow: auto;
   display: flex;
   flex-flow: row nowrap;
@@ -97,7 +98,6 @@
   background: $colour-secondary;
   color: $colour-white;
   border-radius: 5px 10px 5px;
-  box-shadow: $shadow;
   min-width: 100px;
   padding: 15px;
   width: fit-content;
@@ -107,6 +107,7 @@
   width: 100%;
   display: flex;
   flex-flow: column;
-  padding: 1em;
-  padding-bottom: 100px;
+  padding: 0.5em;
+  overflow-y: scroll;
+  height: calc(100vh - 90px)
 }

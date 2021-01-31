@@ -9,7 +9,6 @@ import * as io from "socket.io-client";
 const socket = io("http://localhost:3000");
 
 function App() {
-  const [colour] = useState("#FFF000");
   const [username, setUsername] = useState();
   const [hasUsername, setHasUsername] = useState(false);
 

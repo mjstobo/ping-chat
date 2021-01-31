@@ -1,35 +1,43 @@
-import React, { useContext, useEffect } from 'react';
-import './Chat.scss';
-import ChatBar from  './ChatBar';
-import ChatMessage from './ChatMessage';
-import SocketContext from '../Context/SocketContext';
-import { MessageHistoryContext }  from '../Context/MessageHistoryContext';
-
+import React, { useContext, useEffect } from "react";
+import "./Chat.scss";
+import ChatBar from "./ChatBar";
+import ChatMessage from "./ChatMessage";
+import SocketContext from "../Context/SocketContext";
+import { MessageHistoryContext } from "../Context/MessageHistoryContext";
 
 function ChatContainer(props) {
-  const [messages, setMessages] = useContext(MessageHistoryContext)
+  const [messages, setMessages] = useContext(MessageHistoryContext);
   const socket = useContext(SocketContext);
 
   useEffect(() => {
-    socket.on("SERVER_MESSAGE", message => {
+    socket.on("SERVER_MESSAGE", (message) => {
       const receivedMessage = {
         content: message.content,
         author: message.author,
         count: messages.length + 1,
-        type: 'server'
-        }
-      setMessages(messages => [...messages, receivedMessage]);
-    })
-  }, [])
+        type: "server",
+      };
+      setMessages((messages) => [...messages, receivedMessage]);
+    });
+    console.log("changing height");
+    let chatWindow = document.getElementById("chat");
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+  });
 
   return (
     <div className="chat-container">
-        <div className="chat-window">
-          {messages.map(message => {
-            return  <ChatMessage key={message.content + message.count} type={message.type ? 'server' : ''} message={message} />
-          })}
-        </div>
-        <ChatBar hasUsername={props.hasUsername} username={props.username}/>
+      <div className="chat-window" id="chat">
+        {messages.map((message) => {
+          return (
+            <ChatMessage
+              key={message.content + message.count}
+              type={message.type ? "server" : ""}
+              message={message}
+            />
+          );
+        })}
+      </div>
+      <ChatBar hasUsername={props.hasUsername} username={props.username} />
     </div>
   );
 }
