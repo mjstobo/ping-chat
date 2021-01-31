@@ -21,6 +21,8 @@ body {
 .App {
   height: 100%;
   width: 100%;
+  display: flex;
+  flex-flow: row;
 }
 
 .App-header {
