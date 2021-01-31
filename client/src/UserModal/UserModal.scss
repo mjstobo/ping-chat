@@ -18,7 +18,7 @@
   max-height: 100%;
 
   background-color: $colour-white;
-  color: $colour-secondary;
+  color: $colour-primary;
 }
 
 .modal-content {
@@ -36,13 +36,15 @@
   background-color: $colour-white;
     padding: 1%;
     width: 95%;
+    display: flex;
+    flex-flow: column;
 }
 
 .username-input {
   width: 100%;
   border: none;
-  border-bottom: 2px solid $colour-accent-2;
-  color: $colour-accent-2;
+  border-bottom: 2px solid $colour-primary;
+  color: $colour-primary;
   font-size: 1.4em;
   font-weight: 700;
 }
@@ -50,7 +52,7 @@
 .username-submit {
   margin-top: 15px;
   border: none;
-  background: $colour-secondary;
+  background: $colour-primary;
   font-size: 1.05em;
   font-weight: 600;
   color: $colour-white;
@@ -58,8 +60,14 @@
   border-radius: 10px;
 }
 
+.username-submit:hover {
+  cursor: pointer;
+  background-color: $colour-secondary;
+  color: $colour-primary;
+}
+
 .username-label {
-  color: $colour-accent-2;
+  color: $colour-accent;
   font-weight: 700;
   font-size: 0.8em;
 }

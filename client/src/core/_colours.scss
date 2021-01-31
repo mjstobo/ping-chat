@@ -1,9 +1,9 @@
-$colour-primary: #FF7433;
-$colour-secondary: #004452;
-$colour-bg: #F2F2F2; 
-$colour-white: #FFFFFF;
-$colour-accent: #FFC6AC;
-$colour-accent-2: #551144;
+$colour-primary: #001E3D ;
+$colour-secondary: #FFDDD2;
+$colour-bg: #ffffff; 
+$colour-white: #EDF6F9;
+$colour-accent: #FFDDD2;
+$colour-accent-2: #ED1C24;
 
 $background: $colour-bg;
 
@@ -13,3 +13,8 @@ $shadow: 0 1px 2px rgba(0,0,0,0.07),
 0 8px 16px rgba(0,0,0,0.07),
 0 16px 32px rgba(0,0,0,0.07), 
 0 32px 64px rgba(0,0,0,0.07);
+
+$subtle-shadow: 0 1px 1px rgba(0,0,0,0.08), 
+0 4px 4px rgba(0,0,0,0.09), 
+0 7px 7px rgba(0,0,0,0.11), 
+0 10px 10px rgba(0,0,0,0.12);

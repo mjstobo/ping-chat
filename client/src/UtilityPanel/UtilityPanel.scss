@@ -2,7 +2,15 @@
 
 .utility-bar-container {
     width: 12.5%;
-    background: $colour-secondary;
-    color: white;
+    color: $colour-primary;
     padding: 1%;
+}
+
+.utility-tile {
+    background-color: $colour-secondary;
+    max-width: 40%;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: $subtle-shadow;
 }

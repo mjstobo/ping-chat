@@ -17,10 +17,10 @@
 
 .chat-bar {
   position: fixed;
-  width: 73.75%;
+  width: 74%;
   bottom: 0;
   padding: 10px;
-  background: $colour-accent;
+  background: $colour-primary;
   display: flex;
   box-shadow: $shadow;
   align-items: center;
@@ -28,7 +28,7 @@
   border-radius: 8px;
 
   & .chat-bar-heading {
-    color: $colour-secondary;
+    color: $colour-accent;
     margin: 5px;
   }
 }
@@ -65,13 +65,14 @@
   font-size: 1.2em;
   min-height: 30px;
   font-weight: 600;
-  color: $colour-secondary;
+  padding: 6px;
+  color: $colour-accent-2;
   margin-left: auto;
 
   &:hover {
     cursor: pointer;
-    border: 2px solid $colour-accent;
-    border-radius: 4px;
+    background: $colour-primary;
+    border-radius: 2px;
   }
 }
 
@@ -85,7 +86,7 @@
   margin-left: auto;
 
   & .chat-window-text {
-    background-color: $colour-accent-2;
+    background-color: $colour-primary;
     color: $colour-white;
   }
 }
@@ -100,12 +101,13 @@
 }
 
 .chat-window-text {
-  background: $colour-secondary;
-  color: $colour-white;
+  background: $colour-primary;
+  color: $colour-primary;
   border-radius: 5px 10px 5px;
   min-width: 100px;
   padding: 15px;
   width: fit-content;
+  box-shadow: $subtle-shadow;
 }
 
 .chat-window {
@@ -114,5 +116,5 @@
   flex-flow: column;
   overflow-y: scroll;
   padding: 1.5%;
-  height: calc(100vh - 110px)
+  height: calc(100vh - 95px)
 }

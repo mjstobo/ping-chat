@@ -3,7 +3,15 @@
 
 .social-bar-container {
     width: 12.5%;
-    background: $colour-secondary;
-    color: white;
+    color: $colour-primary;
     padding: 1%;
+}
+
+.online-users-tile {
+    background-color: $colour-primary;
+    width: 70%;
+    padding: 15px;
+    border-radius: 8px;
+    color: white;
+    box-shadow: $subtle-shadow;
 }
