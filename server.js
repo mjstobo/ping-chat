@@ -13,11 +13,21 @@ app.get("/", function (req, res) {
 });
 
 io.on("connection", (socket) => {
-  console.log("user has connected", socket.id)
+  let currSocket = socket.id;
+  socket.join("chat");
+  let clients = io.sockets.adapter.rooms["chat"].sockets;
+  socket.emit("clients", clients);
+  socket.broadcast.emit("USER_CONNECT", clients);
+
   socket.on("chat message", (message) => {
     const author = message.author;
-    console.log("Broadcasting ", message, author)
-    socket.broadcast.emit("SERVER_MESSAGE", message);
+    console.log("Broadcasting ", message, author);
+    socket.to("chat").emit("SERVER_MESSAGE", message);
+  });
+
+  socket.on("disconnect", (reason) => {
+    console.log(reason);
+    socket.to("chat").emit("USER_DISCONNECT", [socket.id, reason]);
   });
 });
 

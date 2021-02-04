@@ -7,7 +7,6 @@
   height: 95%;
   margin: 1em;
   border-radius: 8px;
-  min-height: 100vh;
   flex-flow: column;
   align-items: flex-start;
   background-color: white;
@@ -16,16 +15,13 @@
 }
 
 .chat-bar {
-  position: fixed;
-  width: 74%;
-  bottom: 0;
+  width: 100%;
   padding: 10px;
   background: $colour-primary;
   display: flex;
   box-shadow: $shadow;
   align-items: center;
   align-self: center;
-  border-radius: 8px;
 
   & .chat-bar-heading {
     color: $colour-accent;
@@ -86,8 +82,8 @@
   margin-left: auto;
 
   & .chat-window-text {
-    background-color: $colour-primary;
-    color: $colour-white;
+    background-color: $colour-secondary;
+    color: $colour-primary;
   }
 }
 
@@ -102,7 +98,7 @@
 
 .chat-window-text {
   background: $colour-primary;
-  color: $colour-primary;
+  color: $colour-white;
   border-radius: 5px 10px 5px;
   min-width: 100px;
   padding: 15px;
@@ -116,5 +112,5 @@
   flex-flow: column;
   overflow-y: scroll;
   padding: 1.5%;
-  height: calc(100vh - 95px)
+  height: 88.5vh;
 }
