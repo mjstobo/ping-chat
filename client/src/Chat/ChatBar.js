@@ -2,16 +2,19 @@ import React, { useState, useContext } from "react";
 import "./Chat.scss";
 import SocketContext from "../Context/SocketContext";
 import { MessageHistoryContext } from "../Context/MessageHistoryContext";
+import { UserContext } from "../Context/UserContext";
 
 function ChatBar(props) {
   const [messageInput, setMessageInput] = useState("");
   const [messages, setMessages] = useContext(MessageHistoryContext);
+  const [user, setUser] = useContext(UserContext);
+
   const socket = useContext(SocketContext);
 
   const sendMessage = (msg) => {
     const newMessage = {
       content: msg,
-      author: props.username,
+      author: user.name,
       count: messages.length + 1,
     };
 
@@ -44,9 +47,7 @@ function ChatBar(props) {
         </button>
       </form>
       <div className="username-div">
-        <h3 className="username-label">
-          {props.hasUsername ? props.username : ""}
-        </h3>
+        <h3 className="username-label">{user.hasUsername ? user.name : ""}</h3>
       </div>
     </div>
   );

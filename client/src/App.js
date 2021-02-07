@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "./index.scss";
 import ChatContainer from "./Chat/ChatContainer";
 import SocialPanel from "./SocialPanel/SocialPanel";
@@ -7,28 +7,19 @@ import SocketContext from "./Context/SocketContext";
 import UserModal from "./UserModal/UserModal";
 import { MessageHistoryProvider } from "./Context/MessageHistoryContext";
 import * as io from "socket.io-client";
+import { UserContext, UserProvider } from "./Context/UserContext";
 
 const socket = io("http://localhost:3000");
 
 function App() {
-  const [username, setUsername] = useState();
-  const [hasUsername, setHasUsername] = useState(false);
-
+  const [user, setUser] = useContext(UserContext);
   return (
     <div className="App">
       <SocketContext.Provider value={socket}>
         <MessageHistoryProvider>
-          {hasUsername ? (
-            ""
-          ) : (
-            <UserModal
-              setUsername={setUsername}
-              username={username}
-              setHasUsername={setHasUsername}
-            />
-          )}
+          {user.hasUsername ? "" : <UserModal user={user} />}
           <SocialPanel />
-          <ChatContainer username={username} hasUsername={hasUsername} />
+          <ChatContainer />
           <UtilityPanel />
         </MessageHistoryProvider>
       </SocketContext.Provider>

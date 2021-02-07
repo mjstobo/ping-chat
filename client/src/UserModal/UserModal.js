@@ -1,16 +1,17 @@
-import React from "react";
+import React, { useContext, useState } from "react";
+import { UserContext, UserProvider } from "../Context/UserContext";
 import "./UserModal.scss";
 
-function UserModal(props) {
+function UserModal() {
+  const [user, setUser] = useContext(UserContext);
+
   const handleChange = (event) => {
-    props.setUsername(event.target.value);
-    console.log(props.username);
+    setUser({ ...user, name: event.target.value });
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    props.setUsername(props.username);
-    props.setHasUsername(true);
+    setUser({ ...user, hasUsername: true });
   };
 
   return (
@@ -20,7 +21,7 @@ function UserModal(props) {
         <form className="modal-form">
           <input
             onChange={handleChange}
-            value={props.username}
+            value={user.name}
             className="modal-form username-input"
           />
           <button onClick={handleSubmit} className="username-submit">

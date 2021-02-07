@@ -4,9 +4,11 @@ import ChatBar from "./ChatBar";
 import ChatMessage from "./ChatMessage";
 import SocketContext from "../Context/SocketContext";
 import { MessageHistoryContext } from "../Context/MessageHistoryContext";
+import { UserContext, UserProvider } from "../Context/UserContext";
 
 function ChatContainer(props) {
   const [messages, setMessages] = useContext(MessageHistoryContext);
+  const [user, setUser] = useContext(UserContext);
   const socket = useContext(SocketContext);
 
   useEffect(() => {
@@ -40,7 +42,7 @@ function ChatContainer(props) {
           );
         })}
       </div>
-      <ChatBar hasUsername={props.hasUsername} username={props.username} />
+      <ChatBar />
     </div>
   );
 }

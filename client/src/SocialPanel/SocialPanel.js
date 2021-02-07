@@ -4,28 +4,30 @@ import SocialTile from "./SocialTile";
 import SocketContext from "../Context/SocketContext";
 
 function SocialPanel(props) {
-  const [users, setUsers] = useState([]);
+  const [currentUsers, setcurrentUsers] = useState([]);
   const socket = useContext(SocketContext);
 
   useEffect(() => {
     socket.on("clients", (userList) => {
-      setUsers(Object.keys(userList));
+      setcurrentUsers(Object.keys(userList));
     });
 
     socket.on("USER_DISCONNECT", ([socketId, reason_code]) => {
-      let remainingUsers = users.filter((user) => user.id !== socketId);
-      setUsers([remainingUsers]);
+      let remainingcurrentUsers = currentUsers.filter(
+        (user) => user.id !== socketId
+      );
+      setcurrentUsers([remainingcurrentUsers]);
     });
 
     socket.on("USER_CONNECT", (userList) => {
-      setUsers(Object.keys(userList));
+      setcurrentUsers(Object.keys(userList));
     });
   }, []);
 
   return (
     <div className="social-bar-container">
       <h2>Online Users</h2>
-      {users.map((user) => (
+      {currentUsers.map((user) => (
         <SocialTile
           name={user.name ? user.name : "User"}
           id={user.id}
