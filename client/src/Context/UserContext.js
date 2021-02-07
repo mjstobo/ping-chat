@@ -5,7 +5,6 @@ export const UserContext = React.createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(0);
-  const socket = useContext(SocketContext);
 
   useEffect(() => {
     console.log(user);

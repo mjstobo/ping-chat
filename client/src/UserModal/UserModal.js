@@ -1,9 +1,11 @@
-import React, { useContext, useState } from "react";
-import { UserContext, UserProvider } from "../Context/UserContext";
+import React, { useContext } from "react";
+import SocketContext from "../Context/SocketContext";
+import { UserContext } from "../Context/UserContext";
 import "./UserModal.scss";
 
 function UserModal() {
   const [user, setUser] = useContext(UserContext);
+  const socket = useContext(SocketContext);
 
   const handleChange = (event) => {
     setUser({ ...user, name: event.target.value });
@@ -11,7 +13,13 @@ function UserModal() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setUser({ ...user, hasUsername: true });
+    let newUser = { ...user, hasUsername: true, id: socket.id };
+    updateUserOnServer(newUser);
+    setUser(newUser);
+  };
+
+  const updateUserOnServer = (user) => {
+    socket.emit("USER_UPDATE", user);
   };
 
   return (
