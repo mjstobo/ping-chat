@@ -2,12 +2,12 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
 const app = express();
-const session = require("express-session");
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
-const { v4: uuidv4 } = require("uuid");
+
 //Env variables
 const port = process.env.PORT || 3000;
+
 //SocketIO Handlers
 const chatHandler = require("./api/SocketHandlers/Chat");
 const userStatusHandler = require("./api/SocketHandlers/UserStatus");
@@ -16,18 +16,6 @@ const routes = require("./api/routes");
 
 app.use(express.static(path.join(__dirname, "/client/build")));
 app.use(bodyParser.json());
-app.use(
-  session({
-    genid: (req) => {
-      return uuidv4(); // use UUIDs for session IDs
-    },
-    secret: "hsfd543hsfh",
-    resave: false,
-    saveUninitialized: true,
-    userLoggedIn: false,
-    name: "pingchat",
-  })
-);
 app.use("/users", routes.users);
 
 app.get("/", function (req, res) {

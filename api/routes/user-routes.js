@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const session = require("express-session");
+const jwt = require("jsonwebtoken");
+const { generateJWTToken, verifyToken } = require("../util/jwt");
 
 const {
   createUser,
@@ -21,12 +22,16 @@ router.post("/login", async (req, res) => {
     let parsedUser = userRecord.rows[0];
     let canUserLogIn = await logUserIn(parsedUser.username, req.body.password);
     if (canUserLogIn) {
-      session.userLoggedIn = true;
-      console.log(session);
-      res.status(200).send("User logged in successfully");
+      let userObj = {
+        user: parsedUser.username,
+        loggedInDate: Date.now(),
+      };
+      let token = generateJWTToken(userObj);
+      console.log(token);
+      res.status(200).json({
+        token: token,
+      });
     } else {
-      session.userLoggedIn = false;
-      console.log(session);
       res.status(200).send("Log-in attempt unsuccessful");
     }
   }
