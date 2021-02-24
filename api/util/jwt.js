@@ -2,9 +2,7 @@ const jwt = require("jsonwebtoken");
 const jwtTokenSecret = "gfh423626";
 
 const generateJWTToken = (payload) => {
-  let token = jwt.sign(payload, jwtTokenSecret);
-  console.log(token);
-  return token;
+  return jwt.sign(payload, jwtTokenSecret);
 };
 
 const verifyToken = (token) => {

@@ -27,7 +27,6 @@ router.post("/login", async (req, res) => {
         loggedInDate: Date.now(),
       };
       let token = generateJWTToken(userObj);
-      console.log(token);
       res.status(200).json({
         token: token,
       });
@@ -37,4 +36,9 @@ router.post("/login", async (req, res) => {
   }
 });
 
+router.post("/check", async (req, res) => {
+  let tokenContents = verifyToken(req.body.token);
+  console.log(tokenContents);
+  res.status(200).send("Checked!");
+});
 module.exports = router;
