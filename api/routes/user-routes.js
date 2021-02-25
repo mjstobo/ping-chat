@@ -31,7 +31,7 @@ router.post("/login", async (req, res) => {
         token: token,
       });
     } else {
-      res.status(200).send("Log-in attempt unsuccessful");
+      res.status(400).send("Log-in attempt unsuccessful");
     }
   }
 });
