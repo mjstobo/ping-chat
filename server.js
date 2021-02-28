@@ -6,7 +6,7 @@ const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 
 //Env variables
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4000;
 
 //SocketIO Handlers
 const chatHandler = require("./api/SocketHandlers/Chat");

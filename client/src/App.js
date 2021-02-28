@@ -8,22 +8,30 @@ import UserModal from "./UserModal/UserModal";
 import { MessageHistoryProvider } from "./Context/MessageHistoryContext";
 import * as io from "socket.io-client";
 import { UserContext, UserProvider } from "./Context/UserContext";
+import LoginModal from "./Login/Login";
 
 const socket = io("http://localhost:3000");
 
 function App() {
   const [user, setUser] = useContext(UserContext);
+
   return (
-    <div className="App">
-      <SocketContext.Provider value={socket}>
-        <MessageHistoryProvider>
-          {user.hasUsername ? "" : <UserModal user={user} />}
-          <SocialPanel />
-          <ChatContainer />
-          <UtilityPanel />
-        </MessageHistoryProvider>
-      </SocketContext.Provider>
-    </div>
+    <React.Fragment>
+      {user.isLoggedIn ? (
+        <div className="App">
+          <SocketContext.Provider value={socket}>
+            <MessageHistoryProvider>
+              {user.hasUsername ? "" : <UserModal user={user} />}
+              <SocialPanel />
+              <ChatContainer />
+              <UtilityPanel />
+            </MessageHistoryProvider>
+          </SocketContext.Provider>
+        </div>
+      ) : (
+        <LoginModal />
+      )}
+    </React.Fragment>
   );
 }
 

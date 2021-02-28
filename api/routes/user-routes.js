@@ -27,12 +27,18 @@ router.post("/login", async (req, res) => {
         loggedInDate: Date.now(),
       };
       let token = generateJWTToken(userObj);
-      res.status(200).json({
-        token: token,
-      });
+      res.cookie("ping", token);
+      res
+        .status(200)
+        .json({
+          message: "User logged in successfully",
+          user: parsedUser.username,
+        });
     } else {
-      res.status(400).send("Log-in attempt unsuccessful");
+      res.status(400).json({ message: "User could not be logged in" });
     }
+  } else {
+    res.status(400).json({ message: "User does not exist" });
   }
 });
 

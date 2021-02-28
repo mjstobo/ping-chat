@@ -9,6 +9,7 @@ function LoginModal() {
     username: "",
     password: "",
   });
+  const [authUser, setAuthUser] = useContext(UserContext);
 
   const handleChange = (e) => {
     const value = e.target.value;
@@ -17,8 +18,31 @@ function LoginModal() {
       [e.target.id]: value,
     });
   };
-  const handleSubmit = (e) => {};
-  const userLogin = () => {};
+  const handleSubmit = async (e) => {
+    if (!user.username || !user.password) {
+      console.log("no username or password");
+    } else {
+      e.preventDefault();
+      await userLogin();
+    }
+  };
+  const userLogin = async () => {
+    await axios
+      .post("/users/login", user)
+      .then((response) => {
+        if (response.status === 200) {
+          console.log("login success");
+          console.log(response);
+          setAuthUser({
+            ...authUser,
+            name: response.data.user,
+            hasUsername: true,
+            isLoggedIn: true,
+          });
+        }
+      })
+      .catch((error) => console.log(error));
+  };
   //add handlers for auth
   //update usercontext on success
   //redirect on success
@@ -34,7 +58,7 @@ function LoginModal() {
             Welcome to <span className="login-title">ping.</span>
           </h1>
         </div>
-        <form className="login-form">
+        <form className="login-form" onSubmit={handleSubmit}>
           <input
             id="username"
             type="username"
@@ -49,9 +73,7 @@ function LoginModal() {
             value={user.password}
             onChange={handleChange}
           />
-          <button type="submit" onSubmit={handleSubmit}>
-            Login
-          </button>
+          <button type="submit">Login</button>
         </form>
       </div>
     </div>
