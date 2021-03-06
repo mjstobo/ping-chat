@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./index.scss";
 import ChatContainer from "./Chat/ChatContainer";
 import SocialPanel from "./SocialPanel/SocialPanel";
@@ -9,11 +9,39 @@ import { MessageHistoryProvider } from "./Context/MessageHistoryContext";
 import * as io from "socket.io-client";
 import { UserContext, UserProvider } from "./Context/UserContext";
 import LoginModal from "./Login/Login";
+import axios from "axios";
 
 const socket = io("http://localhost:3000");
 
 function App() {
   const [user, setUser] = useContext(UserContext);
+
+  useEffect(() => {
+    checkLoggedInState();
+  }, [user]);
+
+  const checkLoggedInState = () => {
+    axios.get("/users/me").then((response) => {
+      if (response.status == 200) {
+        if (!user.hasLoggedIn) {
+          console.log("Logged in!");
+          setUser({
+            ...user,
+            name: response.data.user,
+            isLoggedIn: true,
+            hasUsername: true,
+          });
+        }
+      } else {
+        console.log("I need to log in");
+        setUser({
+          ...user,
+          isLoggedIn: false,
+          hasUsername: false,
+        });
+      }
+    });
+  };
 
   return (
     <React.Fragment>

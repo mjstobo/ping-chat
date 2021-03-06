@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const jwt = require("jsonwebtoken");
 const { generateJWTToken, verifyToken } = require("../util/jwt");
 
 const {
@@ -27,13 +26,17 @@ router.post("/login", async (req, res) => {
         loggedInDate: Date.now(),
       };
       let token = generateJWTToken(userObj);
-      res.cookie("ping", token);
-      res
-        .status(200)
-        .json({
-          message: "User logged in successfully",
-          user: parsedUser.username,
-        });
+      let refresh_token = generateJWTToken({
+        refresh_token: "refresh my session!",
+        ...userObj,
+      });
+
+      res.cookie("ping_refresh", refresh_token);
+      res.status(200).json({
+        message: "User logged in successfully",
+        user: parsedUser.username,
+        token: token,
+      });
     } else {
       res.status(400).json({ message: "User could not be logged in" });
     }
@@ -47,4 +50,30 @@ router.post("/check", async (req, res) => {
   console.log(tokenContents);
   res.status(200).send("Checked!");
 });
+
+router.get("/me", async (req, res) => {
+  let refreshToken = req.cookies.ping_refresh;
+
+  if (refreshToken) {
+    try {
+      let tokenPayload = verifyToken(refreshToken);
+      let newRefreshToken = generateJWTToken({
+        ...tokenPayload,
+        date: Date.now(),
+      });
+      let newJWTToken = generateJWTToken({
+        user: tokenPayload.user,
+        loggedInDate: Date.now(),
+      });
+      res.cookie("ping_refresh", newRefreshToken);
+      res.status(200).json({
+        user: tokenPayload.user,
+        token: newJWTToken,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+});
+
 module.exports = router;

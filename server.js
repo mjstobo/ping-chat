@@ -4,6 +4,7 @@ const path = require("path");
 const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
+const cookieParser = require("cookie-parser");
 
 //Env variables
 const port = process.env.PORT || 4000;
@@ -16,6 +17,7 @@ const routes = require("./api/routes");
 
 app.use(express.static(path.join(__dirname, "/client/build")));
 app.use(bodyParser.json());
+app.use(cookieParser());
 app.use("/users", routes.users);
 
 app.get("/", (req, res) => {
