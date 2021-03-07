@@ -31,7 +31,10 @@ router.post("/login", async (req, res) => {
         ...userObj,
       });
 
-      res.cookie("ping_refresh", refresh_token);
+      res.cookie("ping_refresh", refresh_token, {
+        expires: new Date(Date.now() + 30000),
+        httpOnly: true,
+      });
       res.status(200).json({
         message: "User logged in successfully",
         user: parsedUser.username,
@@ -65,7 +68,10 @@ router.get("/me", async (req, res) => {
         user: tokenPayload.user,
         loggedInDate: Date.now(),
       });
-      res.cookie("ping_refresh", newRefreshToken);
+      res.cookie("ping_refresh", newRefreshToken, {
+        expires: new Date(Date.now() + 30000),
+        httpOnly: true,
+      });
       res.status(200).json({
         user: tokenPayload.user,
         token: newJWTToken,

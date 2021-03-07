@@ -18,7 +18,7 @@ function App() {
 
   useEffect(() => {
     checkLoggedInState();
-  }, [user]);
+  }, []);
 
   const checkLoggedInState = () => {
     axios.get("/users/me").then((response) => {
