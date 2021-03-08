@@ -3,6 +3,7 @@ import SocketContext from "../Context/SocketContext";
 import { UserContext } from "../Context/UserContext";
 import "./Login.scss";
 import axios from "axios";
+import { Socket } from "socket.io-client";
 
 function LoginModal() {
   const [user, setUser] = useState({
@@ -10,6 +11,7 @@ function LoginModal() {
     password: "",
   });
   const [authUser, setAuthUser] = useContext(UserContext);
+  const socket = useContext(SocketContext);
 
   const handleChange = (e) => {
     const value = e.target.value;
@@ -27,6 +29,7 @@ function LoginModal() {
     }
   };
   const userLogin = async () => {
+    console.log(user);
     await axios
       .post("/users/login", user)
       .then((response) => {

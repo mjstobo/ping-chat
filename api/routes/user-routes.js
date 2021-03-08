@@ -30,9 +30,9 @@ router.post("/login", async (req, res) => {
         refresh_token: "refresh my session!",
         ...userObj,
       });
-
+      console.log(`User ${parsedUser.username} has logged in successfully`);
       res.cookie("ping_refresh", refresh_token, {
-        expires: new Date(Date.now() + 30000),
+        expires: new Date(Date.now() + 36000),
         httpOnly: true,
       });
       res.status(200).json({
@@ -41,6 +41,7 @@ router.post("/login", async (req, res) => {
         token: token,
       });
     } else {
+      console.log(`Failed login attempt`);
       res.status(400).json({ message: "User could not be logged in" });
     }
   } else {
@@ -55,30 +56,41 @@ router.post("/check", async (req, res) => {
 });
 
 router.get("/me", async (req, res) => {
-  let refreshToken = req.cookies.ping_refresh;
+  const refreshToken = req.cookies.ping_refresh;
 
   if (refreshToken) {
     try {
       let tokenPayload = verifyToken(refreshToken);
-      let newRefreshToken = generateJWTToken({
-        ...tokenPayload,
-        date: Date.now(),
-      });
-      let newJWTToken = generateJWTToken({
-        user: tokenPayload.user,
-        loggedInDate: Date.now(),
-      });
-      res.cookie("ping_refresh", newRefreshToken, {
-        expires: new Date(Date.now() + 30000),
-        httpOnly: true,
-      });
-      res.status(200).json({
-        user: tokenPayload.user,
-        token: newJWTToken,
-      });
+      console.log(tokenPayload);
+
+      if (tokenPayload.expires - Date.now()) {
+        // token has expired, user must login
+      } else {
+        let newRefreshToken = generateJWTToken({
+          ...tokenPayload,
+          date: Date.now(),
+        });
+        let newJWTToken = generateJWTToken({
+          user: tokenPayload.user,
+          loggedInDate: Date.now(),
+        });
+        res.cookie("ping_refresh", newRefreshToken, {
+          expires: new Date(Date.now() + 36000),
+          httpOnly: true,
+        });
+        res.status(200).json({
+          user: tokenPayload.user,
+          token: newJWTToken,
+        });
+      }
     } catch (error) {
       console.log(error);
     }
+  } else {
+    console.log("Refresh Token not found. Unable to revalidate session");
+    res.status(400).json({
+      message: "Unable to refresh user session",
+    });
   }
 });
 

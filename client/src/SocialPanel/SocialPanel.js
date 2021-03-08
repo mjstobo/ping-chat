@@ -9,11 +9,9 @@ function SocialPanel() {
 
   useEffect(() => {
     socket.on("clients", (userList) => {
-      let users = Object.entries(userList)
-        .map((user) => ({
-          id: user[0],
-        }))
-        .filter((user) => user.id !== socket.id);
+      let users = Object.entries(userList).map((user) => ({
+        id: user[0],
+      }));
       setcurrentUsers(users);
     });
 

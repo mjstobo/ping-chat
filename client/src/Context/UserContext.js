@@ -1,13 +1,16 @@
 import React, { useState, useContext, useEffect } from "react";
+import { Socket } from "socket.io-client";
 import SocketContext from "./SocketContext";
 
 export const UserContext = React.createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(0);
+  const socket = useContext(SocketContext);
 
   useEffect(() => {
     console.log(user);
+    socket.emit("USER_UPDATE", user);
   }, [user]);
 
   return (
