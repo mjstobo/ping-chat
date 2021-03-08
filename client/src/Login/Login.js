@@ -1,9 +1,7 @@
 import React, { useContext, useState } from "react";
-import SocketContext from "../Context/SocketContext";
 import { UserContext } from "../Context/UserContext";
 import "./Login.scss";
 import axios from "axios";
-import { Socket } from "socket.io-client";
 
 function LoginModal() {
   const [user, setUser] = useState({
@@ -11,7 +9,6 @@ function LoginModal() {
     password: "",
   });
   const [authUser, setAuthUser] = useContext(UserContext);
-  const socket = useContext(SocketContext);
 
   const handleChange = (e) => {
     const value = e.target.value;
@@ -46,6 +43,7 @@ function LoginModal() {
       })
       .catch((error) => console.log(error));
   };
+
   //add handlers for auth
   //update usercontext on success
   //redirect on success
