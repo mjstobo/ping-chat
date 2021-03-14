@@ -8,9 +8,11 @@ import { MessageHistoryProvider } from "./Context/MessageHistoryContext";
 import { UserContext } from "./Context/UserContext";
 import LoginModal from "./Login/Login";
 import axios from "axios";
+import SocketContext from "./Context/SocketContext";
 
 function App() {
   const [user, setUser] = useContext(UserContext);
+  const socket = useContext(SocketContext);
 
   useEffect(() => {
     checkLoggedInState();
@@ -19,15 +21,16 @@ function App() {
   const checkLoggedInState = () => {
     try {
       axios.get("/users/me").then((response) => {
-        if (response.status == 200) {
+        if (response.status === 200) {
           if (!user.hasLoggedIn) {
             console.log("Logged in!");
-            setUser({
+            let userObj = {
               ...user,
               name: response.data.user,
               isLoggedIn: true,
               hasUsername: true,
-            });
+            };
+            setUser(userObj);
           }
         } else {
           console.log("I need to log in");

@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { UserContext } from "../Context/UserContext";
 import "./Login.scss";
 import axios from "axios";
+import SocketContext from "../Context/SocketContext";
 
 function LoginModal() {
   const [user, setUser] = useState({
@@ -9,6 +10,7 @@ function LoginModal() {
     password: "",
   });
   const [authUser, setAuthUser] = useContext(UserContext);
+  const socket = useContext(SocketContext);
 
   const handleChange = (e) => {
     const value = e.target.value;
@@ -26,18 +28,20 @@ function LoginModal() {
     }
   };
   const userLogin = async () => {
-    console.log(user);
     await axios
       .post("/users/login", user)
       .then((response) => {
         if (response.status === 200) {
-          console.log("login success");
-          console.log(response);
-          setAuthUser({
-            ...authUser,
+          let userObj = {
+            id: socket.id,
             name: response.data.user,
             hasUsername: true,
             isLoggedIn: true,
+          };
+          socket.emit("USER_UPDATE", userObj);
+          setAuthUser({
+            ...authUser,
+            ...userObj,
           });
         }
       })

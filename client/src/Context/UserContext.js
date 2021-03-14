@@ -9,7 +9,6 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     console.log(user);
-    socket.emit("USER_UPDATE", user);
   }, [user]);
 
   return (

@@ -5,6 +5,8 @@ const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 const cookieParser = require("cookie-parser");
+require("dotenv").config();
+const User = require("./api/db/schemas/users");
 
 //Env variables
 const port = process.env.PORT || 4000;
@@ -24,12 +26,12 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "/client/build", "index.html"));
 });
 
-const userConnect = (socket) => {
+const userConnect = async (socket) => {
   console.log("user connected", socket.id);
   socket.join("chat");
-  let clients = io.sockets.adapter.rooms["chat"].sockets;
-  socket.emit("clients", clients);
-  socket.broadcast.emit("USER_CONNECT", clients);
+  let currentUsers = await User.find();
+  console.log(currentUsers);
+  socket.emit("USER_CONNECT", currentUsers);
 };
 
 const onConnection = (socket) => {

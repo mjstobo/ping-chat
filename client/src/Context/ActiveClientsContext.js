@@ -1,3 +1,4 @@
+import { set } from "mongoose";
 import React, { useState, useContext, useEffect } from "react";
 import SocketContext from "./SocketContext";
 
@@ -8,13 +9,6 @@ export const ActiveClientsProvider = ({ children }) => {
   const socket = useContext(SocketContext);
 
   useEffect(() => {
-    socket.on("clients", (userList) => {
-      let users = Object.entries(userList).map((user) => ({
-        id: user[0],
-      }));
-      setActiveUsers(users);
-    });
-
     socket.on("USER_DISCONNECT", ([socketId, reason_code]) => {
       let remainingcurrentUsers = activeUsers.filter(
         (user) => user.id !== socketId
@@ -22,28 +16,30 @@ export const ActiveClientsProvider = ({ children }) => {
       setActiveUsers(remainingcurrentUsers);
     });
 
-    socket.on("USER_UPDATE", ([socketId, socketName]) => {
-      let updatedUsers = activeUsers.map((user) =>
-        user.id === socketId ? { ...user, name: socketName } : user
-      );
-      console.log(updatedUsers);
-      setActiveUsers(updatedUsers);
-    });
-
-    socket.on("USER_CONNECT", () => {
-      getClients();
-    });
+    return () => {
+      socket.off("USER_DISCONNECT");
+    };
   }, []);
 
-  const getClients = () => {
-    socket.emit("GET_CLIENTS", (clientsList) => {
-      let users = Object.entries(clientsList).map((user) => ({
-        id: user[0],
-      }));
+  useEffect(() => {
+    socket.on("USER_UPDATE", (socketObj) => {});
 
-      setActiveUsers(users);
+    return () => {
+      socket.off("USER_UPDATE");
+    };
+  });
+
+  useEffect(() => {
+    socket.on("USER_CONNECT", (listOfClients) => {
+      console.log(listOfClients);
+      setActiveUsers(listOfClients);
     });
-  };
+
+    return () => {
+      socket.off("USER_CONNECT");
+    };
+  });
+
   return (
     <ActiveClientsContext.Provider value={[activeUsers, setActiveUsers]}>
       {children}
