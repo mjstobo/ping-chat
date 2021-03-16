@@ -29,8 +29,8 @@ app.get("/", (req, res) => {
 const userConnect = async (socket) => {
   console.log("user connected", socket.id);
   socket.join("chat");
-  let currentUsers = await User.find();
-  console.log(currentUsers);
+  let currentUsers = await getCurrentClients();
+  console.log("emitting current users", currentUsers);
   socket.emit("USER_CONNECT", currentUsers);
 };
 
@@ -38,6 +38,13 @@ const onConnection = (socket) => {
   userConnect(socket);
   chatHandler(io, socket);
   userStatusHandler(io, socket);
+};
+
+const getCurrentClients = async () => {
+  return User.find().then((currentUsers) => {
+    console.log(currentUsers);
+    return currentUsers;
+  });
 };
 
 io.on("connection", onConnection);

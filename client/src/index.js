@@ -9,6 +9,7 @@ import SocketContext from "./Context/SocketContext";
 import { ActiveClientsProvider } from "./Context/ActiveClientsContext";
 
 const socket = io("http://localhost:3000");
+socket.emit("connection");
 
 ReactDOM.render(
   <React.StrictMode>

@@ -33,7 +33,7 @@ function LoginModal() {
       .then((response) => {
         if (response.status === 200) {
           let userObj = {
-            id: socket.id,
+            socket_id: socket.id,
             name: response.data.user,
             hasUsername: true,
             isLoggedIn: true,

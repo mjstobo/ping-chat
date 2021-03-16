@@ -15,7 +15,7 @@ function SocialPanel() {
       <SocialTile
         key={user.id}
         name={user.name ? user.name : "Unknown"}
-        id={user.id}
+        id={user.socket_id}
         status={socket.connected ? "online" : "offline"}
       />
     ));

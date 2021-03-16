@@ -26,16 +26,19 @@ function App() {
             console.log("Logged in!");
             let userObj = {
               ...user,
+              socket_id: socket.id,
               name: response.data.user,
               isLoggedIn: true,
               hasUsername: true,
             };
+            socket.emit("USER_UPDATE", userObj);
             setUser(userObj);
           }
         } else {
           console.log("I need to log in");
           setUser({
             ...user,
+            socket_id: socket.id,
             isLoggedIn: false,
             hasUsername: false,
           });

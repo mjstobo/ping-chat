@@ -9,20 +9,26 @@ export const ActiveClientsProvider = ({ children }) => {
   const socket = useContext(SocketContext);
 
   useEffect(() => {
-    socket.on("USER_DISCONNECT", ([socketId, reason_code]) => {
+    socket.on("USER_DISCONNECT", (socketId) => {
+      console.log(activeUsers);
+      console.log(socketId);
       let remainingcurrentUsers = activeUsers.filter(
         (user) => user.id !== socketId
       );
+      console.log(remainingcurrentUsers);
       setActiveUsers(remainingcurrentUsers);
     });
 
     return () => {
       socket.off("USER_DISCONNECT");
     };
-  }, []);
+  });
 
   useEffect(() => {
-    socket.on("USER_UPDATE", (socketObj) => {});
+    socket.on("USER_UPDATE", (updatedUsers) => {
+      console.log(updatedUsers);
+      setActiveUsers(updatedUsers);
+    });
 
     return () => {
       socket.off("USER_UPDATE");
