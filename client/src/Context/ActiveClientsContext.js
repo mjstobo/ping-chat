@@ -13,7 +13,7 @@ export const ActiveClientsProvider = ({ children }) => {
       console.log(socketId);
 
       let filteredUsers = activeUsers.filter(
-        (user) => user.socket_id != socketId
+        (user) => user.socket_id !== socketId
       );
 
       setActiveUsers(filteredUsers);

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import "./index.scss";
 import ChatContainer from "./Chat/ChatContainer";
 import SocialPanel from "./SocialPanel/SocialPanel";
@@ -21,9 +21,9 @@ function App() {
     }
   }, []);
 
-  const checkLoggedInState = () => {
+  const checkLoggedInState = async () => {
     try {
-      axios.get("/users/me").then((response) => {
+      await axios.get("/users/me").then((response) => {
         if (response.status === 200) {
           console.log("Logged in!");
           let userObj = {
@@ -34,8 +34,8 @@ function App() {
           };
           socket.emit("USER_UPDATE", userObj);
           setUser(userObj);
-        } else {
-          console.log("I need to log in");
+        } else if (response.status === 401) {
+          console.log("Unable to refresh session");
           setUser(0);
         }
       });

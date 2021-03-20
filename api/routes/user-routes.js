@@ -42,7 +42,7 @@ router.post("/login", async (req, res) => {
       });
     } else {
       console.log(`Failed login attempt`);
-      res.status(400).json({ message: "User could not be logged in" });
+      res.status(401).json({ message: "User could not be logged in" });
     }
   } else {
     res.status(400).json({ message: "User does not exist" });

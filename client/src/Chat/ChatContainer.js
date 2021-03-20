@@ -20,7 +20,11 @@ function ChatContainer() {
 
       setMessages((messages) => [...messages, receivedMessage]);
     });
-  }, []);
+
+    return () => {
+      socket.off("SERVER_MESSAGE");
+    };
+  }, [messages]);
 
   useEffect(() => {
     let chatWindow = document.getElementById("chat");
