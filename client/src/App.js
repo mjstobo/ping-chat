@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./index.scss";
 import ChatContainer from "./Chat/ChatContainer";
 import SocialPanel from "./SocialPanel/SocialPanel";
@@ -9,39 +9,34 @@ import { UserContext } from "./Context/UserContext";
 import LoginModal from "./Login/Login";
 import axios from "axios";
 import SocketContext from "./Context/SocketContext";
+import { ActiveClientsProvider } from "./Context/ActiveClientsContext";
 
 function App() {
   const [user, setUser] = useContext(UserContext);
   const socket = useContext(SocketContext);
 
   useEffect(() => {
-    checkLoggedInState();
+    if (!user.isLoggedIn) {
+      checkLoggedInState();
+    }
   }, []);
 
   const checkLoggedInState = () => {
     try {
       axios.get("/users/me").then((response) => {
         if (response.status === 200) {
-          if (!user.hasLoggedIn) {
-            console.log("Logged in!");
-            let userObj = {
-              ...user,
-              socket_id: socket.id,
-              name: response.data.user,
-              isLoggedIn: true,
-              hasUsername: true,
-            };
-            socket.emit("USER_UPDATE", userObj);
-            setUser(userObj);
-          }
+          console.log("Logged in!");
+          let userObj = {
+            socket_id: socket.id,
+            name: response.data.user,
+            isLoggedIn: true,
+            hasUsername: true,
+          };
+          socket.emit("USER_UPDATE", userObj);
+          setUser(userObj);
         } else {
           console.log("I need to log in");
-          setUser({
-            ...user,
-            socket_id: socket.id,
-            isLoggedIn: false,
-            hasUsername: false,
-          });
+          setUser(0);
         }
       });
     } catch (error) {
@@ -53,12 +48,16 @@ function App() {
     <React.Fragment>
       {user.isLoggedIn ? (
         <div className="App">
-          <MessageHistoryProvider>
-            {user.hasUsername ? "" : <UserModal user={user} />}
-            <SocialPanel />
-            <ChatContainer />
-            <UtilityPanel />
-          </MessageHistoryProvider>
+          <SocketContext.Provider value={socket}>
+            <ActiveClientsProvider>
+              <MessageHistoryProvider>
+                {user.hasUsername ? "" : <UserModal user={user} />}
+                <SocialPanel />
+                <ChatContainer />
+                <UtilityPanel />
+              </MessageHistoryProvider>
+            </ActiveClientsProvider>
+          </SocketContext.Provider>
         </div>
       ) : (
         <LoginModal />

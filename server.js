@@ -31,7 +31,7 @@ const userConnect = async (socket) => {
   socket.join("chat");
   let currentUsers = await getCurrentClients();
   console.log("emitting current users", currentUsers);
-  socket.emit("USER_CONNECT", currentUsers);
+  socket.to("chat").emit("USER_CONNECT_RESPONSE", currentUsers);
 };
 
 const onConnection = (socket) => {
@@ -41,10 +41,7 @@ const onConnection = (socket) => {
 };
 
 const getCurrentClients = async () => {
-  return User.find().then((currentUsers) => {
-    console.log(currentUsers);
-    return currentUsers;
-  });
+  return User.find();
 };
 
 io.on("connection", onConnection);

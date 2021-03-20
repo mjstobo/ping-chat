@@ -3,47 +3,63 @@ const User = require("../db/schemas/users");
 
 module.exports = (io, socket) => {
   const userIsDisconnecting = async () => {
-    let clients = io.sockets.adapter.rooms["chat"].sockets;
-    let listOfCurrentSockets = [];
-    Object.entries(clients).forEach((user) => {
-      listOfCurrentSockets.push(user[0]);
-    });
-    removeInactiveUsersFromStore().then((response) => {
-      console.log("users removed, ", response);
-    });
     console.log("user leaving", socket.id);
-    await User.deleteMany({ socket_id: socket.id });
-    socket.to("chat").emit("USER_DISCONNECT", socket.id);
+    await User.deleteMany({ socket_id: socket.id }).then((response) => {
+      console.log(response);
+    });
+    removeInactiveUsersFromStore().then(async () => {
+      let currentUsers = await getCurrentClients();
+      console.log("users after disconnecting a user, ", currentUsers);
+      console.log("end current users");
+      socket.to("chat").emit("USER_DISCONNECT", [socket.id, currentUsers]);
+    });
   };
 
   const userUpdate = async (user) => {
     console.log("received update for", user);
-    const newUser = new User({
-      ...user,
-    });
-
-    newUser.save((err, newUser) => {
-      if (err) return console.log(err);
-      console.log(newUser);
-    });
+    await saveUser(user);
     let currentUsers = await getCurrentClients();
-    console.log(currentUsers);
-    socket.to("chat").emit("USER_UPDATE", currentUsers);
+    console.log("users after updating another user, ", currentUsers);
+    console.log("end current users");
+    socket.to("chat").emit("USER_UPDATE_RESPONSE", currentUsers);
   };
 
   const getCurrentClients = async () => {
-    return await User.find();
+    try {
+      return User.find();
+    } catch (e) {
+      return e;
+    }
   };
 
   const removeInactiveUsersFromStore = async (userSocketIds) => {
     return User.deleteMany({
-      $or: [
-        { socket_id: { $nin: userSocketIds } },
-        { socket_id: { $exists: false } },
-      ],
+      $or: [{ socket_id: { $nin: userSocketIds } }],
     });
+  };
+
+  const saveUser = async (user) => {
+    const newUser = new User({
+      ...user,
+    });
+
+    try {
+      return newUser.save((err, newUser) => {
+        if (err) return console.log(err);
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const userConnect = async () => {
+    let currentUsers = await getCurrentClients();
+    console.log("users after connecting a user, ", currentUsers);
+    console.log("end current users");
+    io.in("chat").emit("USER_CONNECT_RESPONSE", currentUsers);
   };
 
   socket.on("disconnecting", userIsDisconnecting);
   socket.on("USER_UPDATE", userUpdate);
+  socket.on("USER_CONNECT", userConnect);
 };

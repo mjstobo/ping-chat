@@ -1,11 +1,9 @@
-import React, { useState, useContext, useEffect } from "react";
-import SocketContext from "./SocketContext";
+import React, { useState, useEffect } from "react";
 
 export const UserContext = React.createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(0);
-  const socket = useContext(SocketContext);
 
   useEffect(() => {
     console.log(user);

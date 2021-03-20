@@ -1,4 +1,3 @@
-import { set } from "mongoose";
 import React, { useState, useContext, useEffect } from "react";
 import SocketContext from "./SocketContext";
 
@@ -9,12 +8,9 @@ export const ActiveClientsProvider = ({ children }) => {
   const socket = useContext(SocketContext);
 
   useEffect(() => {
-    socket.on("USER_DISCONNECT", (socketId) => {
+    socket.on("USER_DISCONNECT", ([socketId, remainingcurrentUsers]) => {
       console.log(activeUsers);
       console.log(socketId);
-      let remainingcurrentUsers = activeUsers.filter(
-        (user) => user.id !== socketId
-      );
       console.log(remainingcurrentUsers);
       setActiveUsers(remainingcurrentUsers);
     });
@@ -25,19 +21,19 @@ export const ActiveClientsProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    socket.on("USER_UPDATE", (updatedUsers) => {
+    socket.on("USER_UPDATE_RESPONSE", (updatedUsers) => {
       console.log(updatedUsers);
       setActiveUsers(updatedUsers);
     });
 
     return () => {
-      socket.off("USER_UPDATE");
+      socket.off("USER_UPDATE_RESPONSE");
     };
   });
 
   useEffect(() => {
     socket.on("USER_CONNECT", (listOfClients) => {
-      console.log(listOfClients);
+      console.log("Listing all clients due to a connection", listOfClients);
       setActiveUsers(listOfClients);
     });
 
