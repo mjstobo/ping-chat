@@ -7,12 +7,8 @@ module.exports = (io, socket) => {
     await User.deleteMany({ socket_id: socket.id }).then((response) => {
       console.log(response);
     });
-    removeInactiveUsersFromStore().then(async () => {
-      let currentUsers = await getCurrentClients();
-      console.log("users after disconnecting a user, ", currentUsers);
-      console.log("end current users");
-      socket.to("chat").emit("USER_DISCONNECT", [socket.id, currentUsers]);
-    });
+    removeInactiveUsersFromStore();
+    socket.to("chat").emit("USER_DISCONNECT", socket.id);
   };
 
   const userUpdate = async (user) => {

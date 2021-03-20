@@ -3,9 +3,11 @@ import "./SocialPanel.scss";
 import SocialTile from "./SocialTile";
 import { ActiveClientsContext } from "../Context/ActiveClientsContext";
 import SocketContext from "../Context/SocketContext";
+import { UserContext } from "../Context/UserContext";
 
 const SocialPanel = () => {
   const [activeUsers, setActiveUsers] = useContext(ActiveClientsContext);
+  const [user, setUser] = useContext(UserContext);
   const [usersRetrieved, setUsersRetrieved] = useState(false);
   const [userTiles, setUserTiles] = useState();
   const socket = useContext(SocketContext);
@@ -28,11 +30,15 @@ const SocialPanel = () => {
 
   useEffect(() => {
     if (usersRetrieved) {
-      let currentUsers = activeUsers.map((user) => (
+      let currentUsers = activeUsers.map((userRecord) => (
         <SocialTile
-          key={user._id}
-          name={user.name ? user.name : "Unknown"}
-          id={user.socket_id}
+          key={userRecord._id}
+          name={
+            userRecord.name === user.name
+              ? `${userRecord.name} (you)`
+              : userRecord.name
+          }
+          id={userRecord.socket_id}
           status={socket.connect ? "online" : "offline"}
         />
       ));
