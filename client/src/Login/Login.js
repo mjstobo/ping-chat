@@ -10,6 +10,7 @@ function LoginModal() {
     password: "",
   });
   const [authUser, setAuthUser] = useContext(UserContext);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const socket = useContext(SocketContext);
 
   const handleChange = (e) => {
@@ -24,6 +25,7 @@ function LoginModal() {
       console.log("no username or password");
     } else {
       e.preventDefault();
+      await setIsSubmitting(true);
       await userLogin();
     }
   };
@@ -31,6 +33,7 @@ function LoginModal() {
     await axios
       .post("/users/login", user)
       .then((response) => {
+        setIsSubmitting(false);
         if (response.status === 200) {
           let userObj = {
             socket_id: socket.id,
@@ -78,7 +81,9 @@ function LoginModal() {
             value={user.password}
             onChange={handleChange}
           />
-          <button type="submit">Login</button>
+          <button type="submit" disabled={isSubmitting}>
+            Login
+          </button>
         </form>
       </div>
     </div>

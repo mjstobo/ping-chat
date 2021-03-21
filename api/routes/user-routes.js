@@ -88,7 +88,7 @@ router.get("/me", async (req, res) => {
     }
   } else {
     console.log("Refresh Token not found. Unable to revalidate session");
-    res.status(400).json({
+    res.status(401).json({
       message: "Unable to refresh user session",
     });
   }
