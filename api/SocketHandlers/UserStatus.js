@@ -1,5 +1,5 @@
-const db = require("../db/mongodb");
 const User = require("../db/schemas/users");
+const db = require("../db/mongodb");
 
 module.exports = (io, socket) => {
   const userIsDisconnecting = async () => {
@@ -31,14 +31,14 @@ module.exports = (io, socket) => {
       ...new Set(listOfUsersFound.map((user) => user.name)),
     ];
 
-    let results = await User.deleteMany({
+    console.log(uniqueIdsToBeRemoved);
+
+    let deleteResult = await User.deleteMany({
       $or: [
         { socket_id: { $nin: userSocketIds } },
         { name: { $in: uniqueIdsToBeRemoved } },
       ],
     });
-
-    console.log(results);
   };
 
   const saveUser = async (user) => {

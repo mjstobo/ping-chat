@@ -15,10 +15,19 @@ const SocialPanel = () => {
   useEffect(() => {
     socket.emit("USER_CONNECT");
     if (!usersRetrieved) {
-      socket.emit("USER_CONNECT");
       socket.on("USER_CONNECT_RESPONSE", (userList) => {
-        console.log("retrieved users from user connect, ", userList);
-        setActiveUsers(userList);
+        let uniqueUsers = [...new Set(userList.map((user) => user.name))];
+        let uniqueActiveUsers = [];
+
+        userList.forEach((el) => {
+          console.log(el);
+          if (uniqueUsers.includes(el.name)) {
+            uniqueUsers.splice(uniqueUsers.indexOf(el), 1);
+            uniqueActiveUsers.push(el);
+          }
+        });
+
+        setActiveUsers(uniqueActiveUsers);
       });
       setUsersRetrieved(true);
     }
