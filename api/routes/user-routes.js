@@ -9,9 +9,45 @@ const {
   getUserRecord,
 } = require("../db/user-db");
 
-router.post("/", async (req, res) => {
-  await createUser(req.body.username, req.body.password);
-  res.status(200).send("Done");
+router.post("/register", async (req, res) => {
+  console.log("registering attempt");
+  try {
+    if (req.body.username && req.body.password) {
+      console.log(req.body);
+      let newUser = await createUser(req.body.username, req.body.password);
+      let parsedUser = newUser.rows[0];
+      let logInUser = await loginHandler(
+        parsedUser.username,
+        req.body.password
+      );
+
+      if (logInUser.token && logInUser.refresh_token) {
+        console.log(`User ${parsedUser.username} has logged in successfully`);
+        res.cookie("ping_refresh", logInUser.refresh_token, {
+          expires: new Date(Date.now() + 36000),
+          httpOnly: true,
+        });
+        res.status(200).json({
+          message: "User logged in successfully",
+          user: parsedUser.username,
+          token: logInUser.token,
+        });
+      } else {
+        res
+          .status(400)
+          .json({ message: "Invalid credentials supplied to register user." });
+      }
+    } else {
+      res
+        .status(400)
+        .json({ message: "Invalid credentials supplied to register user." });
+    }
+  } catch (e) {
+    console.log(e);
+    res
+      .status(400)
+      .json({ message: "User could not be registered. Please try again" });
+  }
 });
 
 router.post("/login", async (req, res) => {
@@ -19,26 +55,18 @@ router.post("/login", async (req, res) => {
   if (userExists) {
     let userRecord = await getUserRecord(req.body.username);
     let parsedUser = userRecord.rows[0];
-    let canUserLogIn = await logUserIn(parsedUser.username, req.body.password);
-    if (canUserLogIn) {
-      let userObj = {
-        user: parsedUser.username,
-        loggedInDate: Date.now(),
-      };
-      let token = generateJWTToken(userObj);
-      let refresh_token = generateJWTToken({
-        refresh_token: "refresh my session!",
-        ...userObj,
-      });
+    let logInUser = await loginHandler(parsedUser.username, req.body.password);
+
+    if (logInUser.token && logInUser.refresh_token) {
       console.log(`User ${parsedUser.username} has logged in successfully`);
-      res.cookie("ping_refresh", refresh_token, {
+      res.cookie("ping_refresh", logInUser.refresh_token, {
         expires: new Date(Date.now() + 36000),
         httpOnly: true,
       });
       res.status(200).json({
         message: "User logged in successfully",
         user: parsedUser.username,
-        token: token,
+        token: logInUser.token,
       });
     } else {
       console.log(`Failed login attempt`);
@@ -48,6 +76,23 @@ router.post("/login", async (req, res) => {
     res.status(400).json({ message: "User does not exist" });
   }
 });
+
+const loginHandler = async (user, password) => {
+  let canUserLogIn = await logUserIn(user, password);
+  if (canUserLogIn) {
+    let userObj = {
+      user: user,
+      loggedInDate: Date.now(),
+    };
+    let token = generateJWTToken(userObj);
+    let refresh_token = generateJWTToken({
+      refresh_token: "refresh my session!",
+      ...userObj,
+    });
+    return { token: token, refresh_token: refresh_token };
+  }
+  console.log("error finding tokens");
+};
 
 router.post("/check", async (req, res) => {
   let tokenContents = verifyToken(req.body.token);
@@ -62,7 +107,6 @@ router.get("/me", async (req, res) => {
     try {
       let tokenPayload = verifyToken(refreshToken);
       console.log(tokenPayload);
-
       if (tokenPayload.expires - Date.now()) {
         // token has expired, user must login
       } else {

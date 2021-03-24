@@ -5,21 +5,20 @@ const saltRounds = 10;
 const createUser = async (username, password) => {
   const userAlreadyExists = await checkUserExists(username);
   if (userAlreadyExists) {
-    return false;
+    return new Error("User already exists");
   } else {
     const hash = await hashPassword(password);
     const queryText =
       "INSERT INTO users(username, password) VALUES ($1, $2) RETURNING *";
     const values = [username, hash];
 
-    return db.query(queryText, values, (err, res) => {
-      if (err) {
-        console.log(err);
-        return err;
-      } else {
-        return res.rows[0];
-      }
-    });
+    let userQuery = await db.query(queryText, values);
+
+    if (userQuery.rows[0]) {
+      return userQuery;
+    } else {
+      return new Error("User query failed");
+    }
   }
 };
 

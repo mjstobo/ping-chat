@@ -21,12 +21,27 @@ function LoginModal() {
     });
   };
   const handleSubmit = async (e) => {
+    e.preventDefault();
+
     if (!user.username || !user.password) {
       console.log("no username or password");
+    } else if (e.nativeEvent.submitter.id === "register") {
+      try {
+        console.log("reaching this");
+        await setIsSubmitting(true);
+        await userRegister();
+      } catch (e) {
+        console.log(e);
+        await setIsSubmitting(false);
+      }
     } else {
-      e.preventDefault();
-      await setIsSubmitting(true);
-      await userLogin();
+      try {
+        await setIsSubmitting(true);
+        await userLogin();
+      } catch (e) {
+        console.log(e);
+        await setIsSubmitting(false);
+      }
     }
   };
   const userLogin = async () => {
@@ -51,12 +66,28 @@ function LoginModal() {
       .catch((error) => console.log(error));
   };
 
-  //add handlers for auth
-  //update usercontext on success
-  //redirect on success
-  //error state on fail
-  //field validation
-  //set as auth entry
+  const userRegister = async () => {
+    console.log(user);
+    await axios
+      .post("/users/register", user)
+      .then((response) => {
+        setIsSubmitting(false);
+        if (response.status === 200) {
+          let userObj = {
+            socket_id: socket.id,
+            name: response.data.user,
+            hasUsername: true,
+            isLoggedIn: true,
+          };
+          socket.emit("USER_UPDATE", userObj);
+          setAuthUser({
+            ...authUser,
+            ...userObj,
+          });
+        }
+      })
+      .catch((error) => console.log(error));
+  };
 
   return (
     <div className="login-modal">
@@ -81,8 +112,20 @@ function LoginModal() {
             value={user.password}
             onChange={handleChange}
           />
-          <button type="submit" disabled={isSubmitting}>
+          <button
+            type="submit"
+            id="login"
+            disabled={isSubmitting ? true : false}
+          >
             Login
+          </button>
+          <p>OR</p>
+          <button
+            type="submit"
+            id="register"
+            disabled={isSubmitting ? true : false}
+          >
+            Register
           </button>
         </form>
       </div>
