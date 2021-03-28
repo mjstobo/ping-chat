@@ -28,21 +28,21 @@ function LoginModal() {
     } else if (e.nativeEvent.submitter.id === "register") {
       try {
         console.log("reaching this");
-        await setIsSubmitting(true);
+        setIsSubmitting(true);
         await userRegister();
       } catch (e) {
         console.log(e);
-        await setIsSubmitting(false);
       }
     } else {
       try {
-        await setIsSubmitting(true);
+        setIsSubmitting(true);
         await userLogin();
       } catch (e) {
         console.log(e);
-        await setIsSubmitting(false);
       }
     }
+
+    setIsSubmitting(false);
   };
   const userLogin = async () => {
     await axios
@@ -116,16 +116,24 @@ function LoginModal() {
             type="submit"
             id="login"
             disabled={isSubmitting ? true : false}
+            class="primary"
           >
-            Login
+            {isSubmitting ? (
+              <span class="material-icons">pending</span>
+            ) : (
+              "Login"
+            )}
           </button>
-          <p>OR</p>
           <button
             type="submit"
             id="register"
             disabled={isSubmitting ? true : false}
           >
-            Register
+            {isSubmitting ? (
+              <span class="material-icons">pending</span>
+            ) : (
+              "Register"
+            )}
           </button>
         </form>
       </div>

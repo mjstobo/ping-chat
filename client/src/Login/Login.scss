@@ -58,6 +58,13 @@
         color: $colour-primary;
         background-color: $colour-bg;
         border-radius: 4px;
+        transition: 0.2s all linear;
+
+        &.primary {
+            color: $colour-secondary;
+            background-color: $colour-primary;
+            border: 2px solid $colour-secondary;
+        }
 
 
         &:hover {
@@ -69,3 +76,4 @@
     }
 
 }
+
