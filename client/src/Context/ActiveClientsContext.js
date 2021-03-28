@@ -9,9 +9,6 @@ export const ActiveClientsProvider = ({ children }) => {
 
   useEffect(() => {
     socket.on("USER_DISCONNECT", (socketId) => {
-      console.log(activeUsers);
-      console.log(socketId);
-
       let filteredUsers = activeUsers.filter(
         (user) => user.socket_id !== socketId
       );
@@ -26,7 +23,7 @@ export const ActiveClientsProvider = ({ children }) => {
 
   useEffect(() => {
     socket.on("USER_UPDATE_RESPONSE", (updatedUsers) => {
-      console.log(updatedUsers);
+      console.log(updatedUsers, " updated user list");
       setActiveUsers(updatedUsers);
     });
 
@@ -44,7 +41,7 @@ export const ActiveClientsProvider = ({ children }) => {
     return () => {
       socket.off("USER_CONNECT");
     };
-  }, []);
+  });
 
   return (
     <ActiveClientsContext.Provider value={[activeUsers, setActiveUsers]}>

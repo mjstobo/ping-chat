@@ -14,19 +14,12 @@ const SocialPanel = () => {
 
   useEffect(() => {
     socket.emit("USER_CONNECT");
-    if (!usersRetrieved) {
+  }, []);
+
+  useEffect(() => {
+    if (!usersRetrieved || user.isLoggedIn) {
       socket.on("USER_CONNECT_RESPONSE", (userList) => {
-        let uniqueUsers = [...new Set(userList.map((user) => user.name))];
-        let uniqueActiveUsers = [];
-
-        userList.forEach((el) => {
-          console.log(el);
-          if (uniqueUsers.includes(el.name)) {
-            uniqueUsers.splice(uniqueUsers.indexOf(el), 1);
-            uniqueActiveUsers.push(el);
-          }
-        });
-
+        let uniqueActiveUsers = filterUsers(userList);
         setActiveUsers(uniqueActiveUsers);
       });
       setUsersRetrieved(true);
@@ -35,11 +28,12 @@ const SocialPanel = () => {
     return () => {
       socket.off("USER_CONNECT_RESPONSE");
     };
-  }, []);
+  });
 
   useEffect(() => {
     if (usersRetrieved) {
-      let currentUsers = activeUsers.map((userRecord) => (
+      let filteredUsers = filterUsers(activeUsers);
+      let currentUsers = filteredUsers.map((userRecord) => (
         <SocialTile
           key={userRecord._id}
           name={
@@ -55,6 +49,22 @@ const SocialPanel = () => {
       setUserTiles(currentUsers);
     }
   }, [activeUsers]);
+
+  const filterUsers = (userList) => {
+    let uniqueUsers = [...new Set(userList.map((user) => user.name))];
+    let uniqueActiveUsers = [];
+
+    userList.sort((a, b) => {
+      return new Date(a.date) - new Date(b.date);
+    });
+
+    uniqueUsers.forEach((user) => {
+      let newUser = userList.find((el) => el.name === user);
+      uniqueActiveUsers.push(newUser);
+    });
+
+    return uniqueActiveUsers;
+  };
 
   return (
     <div className="social-bar-container">

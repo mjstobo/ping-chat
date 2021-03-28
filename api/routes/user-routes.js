@@ -60,7 +60,7 @@ router.post("/login", async (req, res) => {
     if (logInUser.token && logInUser.refresh_token) {
       console.log(`User ${parsedUser.username} has logged in successfully`);
       res.cookie("ping_refresh", logInUser.refresh_token, {
-        expires: new Date(Date.now() + 36000),
+        expires: new Date(Date.now() + 360000),
         httpOnly: true,
       });
       res.status(200).json({
@@ -119,7 +119,7 @@ router.get("/me", async (req, res) => {
           loggedInDate: Date.now(),
         });
         res.cookie("ping_refresh", newRefreshToken, {
-          expires: new Date(Date.now() + 36000),
+          expires: new Date(Date.now() + 360000),
           httpOnly: true,
         });
         res.status(200).json({

@@ -4,6 +4,9 @@ const db = require("../db/mongodb");
 module.exports = (io, socket) => {
   const userIsDisconnecting = async () => {
     removeInactiveUsersFromStore();
+  };
+
+  const userDisconnect = async () => {
     await User.deleteMany({ socket_id: socket.id });
     socket.to("chat").emit("USER_DISCONNECT", socket.id);
   };
@@ -11,6 +14,7 @@ module.exports = (io, socket) => {
   const userUpdate = async (user) => {
     await saveUser(user);
     let currentUsers = await getCurrentClients();
+    console.log(currentUsers, " current users on user update");
     socket.to("chat").emit("USER_UPDATE_RESPONSE", currentUsers);
   };
 
@@ -24,21 +28,24 @@ module.exports = (io, socket) => {
 
   const removeInactiveUsersFromStore = async (userSocketIds) => {
     let listOfUsersFound = await User.find({
-      $or: [{ socket_id: { $nin: userSocketIds } }],
+      socket_id: { $nin: userSocketIds },
     });
 
     let uniqueIdsToBeRemoved = [
       ...new Set(listOfUsersFound.map((user) => user.name)),
     ];
 
-    console.log(uniqueIdsToBeRemoved);
+    console.log(uniqueIdsToBeRemoved, " users to be removed");
 
     let deleteResult = await User.deleteMany({
       $or: [
         { socket_id: { $nin: userSocketIds } },
+        { socket_id: { $exists: false } },
         { name: { $in: uniqueIdsToBeRemoved } },
       ],
     });
+
+    console.log(deleteResult);
   };
 
   const saveUser = async (user) => {
@@ -61,6 +68,7 @@ module.exports = (io, socket) => {
   };
 
   socket.on("disconnecting", userIsDisconnecting);
+  socket.on("disconnect", userDisconnect);
   socket.on("USER_UPDATE", userUpdate);
   socket.on("USER_CONNECT", userConnect);
 };

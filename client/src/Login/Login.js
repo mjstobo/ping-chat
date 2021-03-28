@@ -92,7 +92,9 @@ function LoginModal() {
         }
       })
       .catch((error) =>
-        setValidationMessage("Error registering this account. Please try again")
+        setValidationMessage(
+          "Error logging in with this account. Please try again"
+        )
       );
   };
 
@@ -148,7 +150,7 @@ function LoginModal() {
             value={user.password}
             onChange={handleChange}
           />
-          <span class="form-error">{validationMessage}</span>
+          <span className="form-error">{validationMessage}</span>
           <button
             type="submit"
             id="login"

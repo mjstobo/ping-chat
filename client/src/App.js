@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./index.scss";
 import ChatContainer from "./Chat/ChatContainer";
 import SocialPanel from "./SocialPanel/SocialPanel";
@@ -12,12 +12,21 @@ import { ActiveClientsProvider } from "./Context/ActiveClientsContext";
 
 function App() {
   const [user, setUser] = useContext(UserContext);
+  const [socketConnected, setSocketConnected] = useState(false);
   const socket = useContext(SocketContext);
 
   useEffect(() => {
-    if (!user.isLoggedIn) {
-      checkLoggedInState();
-    }
+    socket.on("connect", () => {
+      setSocketConnected(true);
+      if (!user.isLoggedIn) {
+        checkLoggedInState();
+      }
+    });
+
+    return () => {
+      socket.off("connect");
+      setSocketConnected(false);
+    };
   }, []);
 
   const checkLoggedInState = async () => {

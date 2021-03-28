@@ -47,7 +47,7 @@ function ChatBar(props) {
         </button>
       </form>
       <div className="username-div">
-        <h3 className="username-label">{user.hasUsername ? user.name : ""}</h3>
+        <p className="username-label">{user.hasUsername ? user.name : ""}</p>
       </div>
     </div>
   );
