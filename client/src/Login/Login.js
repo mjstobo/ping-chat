@@ -11,6 +11,7 @@ function LoginModal() {
   });
   const [authUser, setAuthUser] = useContext(UserContext);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [validationMessage, setValidationMessage] = useState("");
   const socket = useContext(SocketContext);
 
   const handleChange = (e) => {
@@ -22,28 +23,51 @@ function LoginModal() {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!user.username || !user.password) {
-      console.log("no username or password");
-    } else if (e.nativeEvent.submitter.id === "register") {
-      try {
-        console.log("reaching this");
-        setIsSubmitting(true);
-        await userRegister();
-      } catch (e) {
-        console.log(e);
-      }
-    } else {
-      try {
-        setIsSubmitting(true);
-        await userLogin();
-      } catch (e) {
-        console.log(e);
+    setValidationMessage("");
+    let validationResult = validateFormInputs();
+    if (validationResult) {
+      if (e.nativeEvent.submitter.id === "register") {
+        try {
+          console.log("reaching this");
+          setIsSubmitting(true);
+          await userRegister();
+        } catch (e) {
+          setValidationMessage("Error registering account. Please try again");
+          console.log(e);
+        }
+      } else {
+        try {
+          setIsSubmitting(true);
+          await userLogin();
+        } catch (e) {
+          console.log(e);
+        }
       }
     }
-
     setIsSubmitting(false);
   };
+
+  const validateFormInputs = () => {
+    if (!user.username && !user.password) {
+      setValidationMessage("Please enter a username & password");
+      return false;
+    }
+    if (!user.username) {
+      setValidationMessage("Please enter a username");
+      return false;
+    }
+
+    if (!user.password) {
+      setValidationMessage("Please enter a password");
+      return false;
+    }
+
+    if (user.username && user.password) {
+      setValidationMessage("");
+      return true;
+    }
+  };
+
   const userLogin = async () => {
     await axios
       .post("/users/login", user)
@@ -61,9 +85,15 @@ function LoginModal() {
             ...authUser,
             ...userObj,
           });
+        } else {
+          setValidationMessage(
+            "Error logging in with account. Please try again"
+          );
         }
       })
-      .catch((error) => console.log(error));
+      .catch((error) =>
+        setValidationMessage("Error registering this account. Please try again")
+      );
   };
 
   const userRegister = async () => {
@@ -84,9 +114,15 @@ function LoginModal() {
             ...authUser,
             ...userObj,
           });
+        } else {
+          setValidationMessage(
+            "Error registering this account. Please try again"
+          );
         }
       })
-      .catch((error) => console.log(error));
+      .catch((error) =>
+        setValidationMessage("Error registering this account. Please try again")
+      );
   };
 
   return (
@@ -112,6 +148,7 @@ function LoginModal() {
             value={user.password}
             onChange={handleChange}
           />
+          <span class="form-error">{validationMessage}</span>
           <button
             type="submit"
             id="login"
