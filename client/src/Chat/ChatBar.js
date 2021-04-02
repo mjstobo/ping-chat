@@ -4,7 +4,7 @@ import SocketContext from "../Context/SocketContext";
 import { MessageHistoryContext } from "../Context/MessageHistoryContext";
 import { UserContext } from "../Context/UserContext";
 
-function ChatBar(props) {
+function ChatBar() {
   const [messageInput, setMessageInput] = useState("");
   const [messages, setMessages] = useContext(MessageHistoryContext);
   const [user, setUser] = useContext(UserContext);

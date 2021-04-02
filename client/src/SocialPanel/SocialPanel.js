@@ -68,8 +68,11 @@ const SocialPanel = () => {
 
   return (
     <div className="social-bar-container">
-      <h2>Online Users</h2>
-      {userTiles}
+      <div className="friends-container"></div>
+      <div className="users-container">
+        <h3 className="social-title">Online Users</h3>
+        {userTiles}
+      </div>
     </div>
   );
 };

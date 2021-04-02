@@ -1,15 +1,17 @@
 @import "../core/colours";
+@import "../core/typography";
 
 .social-bar-container {
-    width: 12.5%;
+    width: 11.5%;
     color: $colour-primary;
     padding: 1%;
+    font-family: $secondary-font;
 }
 
 .users-tile {
     background-color: $colour-primary;
     width: 90%;
-    padding: 15px;
+    padding: 14px;
     border-radius: 8px;
     color: white;
     box-shadow: $subtle-shadow;
@@ -19,13 +21,18 @@
     margin-bottom: 10px;
 }
 
-.users-name {
+.user-name {
+    font-size: 16px;
+}
 
+.social-title {
+    font-size: 16px;
+    width: 100%;
 }
 
 .user-status {
-    height: 10px;
-    width: 10px;
+    height: 7.6px;
+    width: 7.6px;
     border-radius: 50%;
     display: inline-block;
     background-color: #bbb;

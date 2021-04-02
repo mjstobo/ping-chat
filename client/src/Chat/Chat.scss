@@ -1,4 +1,5 @@
 @import "../core/colours";
+@import "../core/typography";
 
 .chat-container {
   display: flex;
@@ -10,7 +11,7 @@
   flex-flow: column;
   align-items: flex-start;
   background-color: white;
-  width: 75%;
+  width: 100%;
   box-shadow: $shadow;
 }
 
@@ -27,6 +28,10 @@
     color: $colour-accent;
     margin: 5px;
   }
+}
+
+.chat-tools-container {
+     min-height: 40px;
 }
 
 .chat-message {
@@ -57,13 +62,15 @@
   max-width: 75px;
   flex: 1;
   border: none;
-  background: $colour-white;
-  font-size: 1.2em;
-  min-height: 30px;
+  background: $colour-primary;
+  font-size: 16px;
+  font-family: $secondary-font;
+  min-height: 40px;
   font-weight: 600;
-  padding: 6px;
-  color: $colour-accent-2;
+  padding: 4px;
+  color: $colour-secondary;
   margin-left: auto;
+  border-radius: 8px;
 
   &:hover {
     cursor: pointer;
@@ -117,4 +124,5 @@
 
 .username-label {
   color: $colour-secondary;
+  margin-right: 5px;
 }

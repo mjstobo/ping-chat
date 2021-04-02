@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import "./index.scss";
 import ChatContainer from "./Chat/ChatContainer";
 import SocialPanel from "./SocialPanel/SocialPanel";
-import UtilityPanel from "./UtilityPanel/UtilityPanel";
 import { MessageHistoryProvider } from "./Context/MessageHistoryContext";
 import { UserContext } from "./Context/UserContext";
 import LoginModal from "./Login/Login";
@@ -40,6 +39,7 @@ function App() {
             isLoggedIn: true,
             hasUsername: true,
           };
+          socket.emit("USER_CONNECT");
           socket.emit("USER_UPDATE", userObj);
           setUser(userObj);
         } else if (response.status === 401) {
@@ -61,7 +61,6 @@ function App() {
               <MessageHistoryProvider>
                 <SocialPanel />
                 <ChatContainer />
-                <UtilityPanel />
               </MessageHistoryProvider>
             </ActiveClientsProvider>
           </SocketContext.Provider>
