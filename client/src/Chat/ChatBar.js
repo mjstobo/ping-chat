@@ -23,6 +23,7 @@ function ChatBar() {
   };
 
   const handleChange = (event) => {
+    socket.emit("USER_TYPE", user.name);
     setMessageInput(event.target.value);
   };
 

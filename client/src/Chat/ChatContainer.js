@@ -1,12 +1,15 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./Chat.scss";
 import ChatBar from "./ChatBar";
 import ChatMessage from "./ChatMessage";
 import SocketContext from "../Context/SocketContext";
 import { MessageHistoryContext } from "../Context/MessageHistoryContext";
+import { UserContext } from "../Context/UserContext";
 
 function ChatContainer() {
   const [messages, setMessages] = useContext(MessageHistoryContext);
+  const [user, setUser] = useContext(UserContext);
+  const [usersTyping, setUsersTyping] = useState("");
   const socket = useContext(SocketContext);
 
   useEffect(() => {
@@ -27,6 +30,21 @@ function ChatContainer() {
   }, [messages]);
 
   useEffect(() => {
+    socket.on("USER_TYPING", (name) => {
+      if (name !== user.name) {
+        setUsersTyping(name);
+        setInterval(() => {
+          setUsersTyping("");
+        }, 5000);
+      }
+    });
+
+    return () => {
+      socket.off("USER_TYPING");
+    };
+  });
+
+  useEffect(() => {
     let chatWindow = document.getElementById("chat");
     chatWindow.scrollTop = chatWindow.scrollHeight;
   });
@@ -43,6 +61,9 @@ function ChatContainer() {
             />
           );
         })}
+      </div>
+      <div className="chat-currently-typing">
+        {usersTyping ? `${usersTyping} is typing...` : ""}
       </div>
       <ChatBar />
     </div>

@@ -30,9 +30,6 @@
   }
 }
 
-.chat-tools-container {
-     min-height: 40px;
-}
 
 .chat-message {
   width: 70%;
@@ -46,6 +43,19 @@
   padding: 10px;
   border: 2px solid $colour-white;
   border-radius: 6px;
+}
+
+.chat-input-container {
+  display: flex;
+  flex-flow: column;
+  flex-grow: 1;
+}
+
+.chat-currently-typing {
+  align-self: flex-start;
+  margin: 5px;
+  margin-left: 7.5px;
+  min-height: 20px;
 }
 
 .chat-message-input {
@@ -119,7 +129,7 @@
   flex-flow: column;
   overflow-y: scroll;
   padding: 1.5%;
-  height: 88.5vh;
+  height: 86vh;
 }
 
 .username-label {
